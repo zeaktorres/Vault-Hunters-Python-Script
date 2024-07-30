@@ -16,10 +16,13 @@ def getPreviousSave():
     )
 
     process = subprocess.Popen(
-        "unzip Vault-Hunters-3rd-Edition-3.14.3-server-files.zip",
+        "unzip -o Vault-Hunters-3rd-Edition-3.14.3-server-files.zip",
         shell=True,
         stdout=subprocess.PIPE,
     )
+    for stdout_line in iter(process.stdout.readline, ""):
+        yield stdout_line
+    process.stdout.close()
     process.wait()
 
     process = subprocess.Popen(
