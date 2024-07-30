@@ -9,6 +9,19 @@ def getPreviousSave():
     s3_client = session.client("s3")
     response = s3_client.list_objects_v2(Bucket="vault-hunters")
     s3_client.download_file("vault-hunters", "world-new.zip", "world-new.zip")
+    s3_client.download_file(
+        "vault-hunters",
+        "Vault-Hunters-3rd-Edition-3.14.3-server-files.zip",
+        "Vault-Hunters-3rd-Edition-3.14.3-server-files.zip",
+    )
+
+    process = subprocess.Popen(
+        "unzip Vault-Hunters-3rd-Edition-3.14.3-server-files.zip",
+        shell=True,
+        stdout=subprocess.PIPE,
+    )
+    process.wait()
+
     process = subprocess.Popen(
         "cp world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
     )
@@ -26,7 +39,6 @@ def uploadSave():
     process = subprocess.Popen("rm world-old.zip", shell=True, stdout=subprocess.PIPE)
     process.wait()
 
-
     # Zip current world
     process = subprocess.Popen(
         "zip -r world-new.zip world", shell=True, stdout=subprocess.PIPE
@@ -34,8 +46,8 @@ def uploadSave():
     process.wait()
 
     process = subprocess.Popen(
-            "mv world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
-            )
+        "mv world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
+    )
     process.wait()
 
     # User can pass customized access key, secret_key and token as well
