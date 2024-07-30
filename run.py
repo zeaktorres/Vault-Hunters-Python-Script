@@ -26,6 +26,14 @@ def getPreviousSave():
     process.wait()
 
     process = subprocess.Popen(
+        "unzip -o world-new.zip",
+        shell=True,
+        text=True,
+    )
+    print(process.stdout)
+    process.wait()
+
+    process = subprocess.Popen(
         "cp world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
     )
     process.wait()
@@ -39,6 +47,9 @@ def getPreviousSave():
 def uploadSave():
     session = boto3.session.Session()
     s3_client = session.client("s3")
+
+    # Handle old world save
+    s3_client.upload_file("world-old.zip", "vault-hunters", "world-old.zip")
     process = subprocess.Popen("rm world-old.zip", shell=True, stdout=subprocess.PIPE)
     process.wait()
 
@@ -48,14 +59,12 @@ def uploadSave():
     )
     process.wait()
 
+    # HAndle new world save, then mark it old
+    s3_client.upload_file("world-new.zip", "vault-hunters", "world-new.zip")
     process = subprocess.Popen(
         "mv world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
     )
     process.wait()
-
-    # User can pass customized access key, secret_key and token as well
-    s3_client.upload_file("world-new.zip", "vault-hunters", "world-new.zip")
-    s3_client.upload_file("world-old.zip", "vault-hunters", "world-old.zip")
 
 
 def startServer():
