@@ -44,7 +44,7 @@ def uploadSave():
 
 def startServer():
     process = subprocess.Popen(
-        "java -Xmx3072M -Xms3072M -jar server.jar nogui pause",
+        "java -Xmx7168M -Xms7168M -jar server.jar nogui pause",
         shell=True,
         stdout=subprocess.PIPE,
     )
