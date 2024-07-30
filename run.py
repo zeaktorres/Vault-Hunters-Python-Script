@@ -26,15 +26,16 @@ def uploadSave():
     process = subprocess.Popen("rm world-old.zip", shell=True, stdout=subprocess.PIPE)
     process.wait()
 
-    process = subprocess.Popen(
-        "mv world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
-    )
-    process.wait()
 
     # Zip current world
     process = subprocess.Popen(
         "zip -r world-new.zip world", shell=True, stdout=subprocess.PIPE
     )
+    process.wait()
+
+    process = subprocess.Popen(
+            "mv world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
+            )
     process.wait()
 
     # User can pass customized access key, secret_key and token as well
