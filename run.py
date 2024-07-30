@@ -1,4 +1,5 @@
 import boto3
+import time
 import subprocess
 from botocore.exceptions import ClientError
 
@@ -58,12 +59,13 @@ def uploadSave():
 
 
 def startServer():
-    process = subprocess.Popen(
+    subprocess.Popen(
         "java -Xmx3072M -Xms3072M -jar server.jar nogui pause", shell=True, text=True
     )
-    process.wait()
 
 
 getPreviousSave()
 startServer()
-uploadSave()
+while True:
+    uploadSave()
+    time.sleep(15 * 60)
