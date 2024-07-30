@@ -4,10 +4,11 @@ from botocore.exceptions import ClientError
 
 
 def getPreviousSave():
+    print("here")
     session = boto3.session.Session()
     # User can pass customized access key, secret_key and token as well
     s3_client = session.client("s3")
-    response = s3_client.list_objects_v2(Bucket="vault-hunters")
+    s3_client.list_objects_v2(Bucket="vault-hunters")
     s3_client.download_file("vault-hunters", "world-new.zip", "world-new.zip")
     s3_client.download_file(
         "vault-hunters",
@@ -18,11 +19,9 @@ def getPreviousSave():
     process = subprocess.Popen(
         "unzip -o Vault-Hunters-3rd-Edition-3.14.3-server-files.zip",
         shell=True,
-        stdout=subprocess.PIPE,
+        text=True,
     )
-    for stdout_line in iter(process.stdout.readline, ""):
-        yield stdout_line
-    process.stdout.close()
+    print(process.stdout)
     process.wait()
 
     process = subprocess.Popen(
@@ -60,9 +59,7 @@ def uploadSave():
 
 def startServer():
     process = subprocess.Popen(
-        "java -Xmx3072M -Xms3072M -jar server.jar nogui pause",
-        shell=True,
-        stdout=subprocess.PIPE,
+        "java -Xmx3072M -Xms3072M -jar server.jar nogui pause", shell=True, text=True
     )
     process.wait()
 
