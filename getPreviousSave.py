@@ -1,7 +1,5 @@
 import boto3
-import time
 import subprocess
-from botocore.exceptions import ClientError
 
 
 def getPreviousSave():
@@ -42,39 +40,3 @@ def getPreviousSave():
         "echo 'eula=true' > eula.txt", shell=True, stdout=subprocess.PIPE
     )
     process.wait()
-
-
-def uploadSave():
-    session = boto3.session.Session()
-    s3_client = session.client("s3")
-
-    # Handle old world save
-    s3_client.upload_file("world-old.zip", "vault-hunters", "world-old.zip")
-    process = subprocess.Popen("rm world-old.zip", shell=True, stdout=subprocess.PIPE)
-    process.wait()
-
-    # Zip current world
-    process = subprocess.Popen(
-        "zip -r world-new.zip world", shell=True, stdout=subprocess.PIPE
-    )
-    process.wait()
-
-    # HAndle new world save, then mark it old
-    s3_client.upload_file("world-new.zip", "vault-hunters", "world-new.zip")
-    process = subprocess.Popen(
-        "mv world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
-    )
-    process.wait()
-
-
-def startServer():
-    subprocess.Popen(
-        "java -Xmx3072M -Xms3072M -jar server.jar nogui pause", shell=True, text=True
-    )
-
-
-getPreviousSave()
-startServer()
-while True:
-    uploadSave()
-    time.sleep(15 * 60)
