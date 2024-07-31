@@ -40,3 +40,6 @@ def getPreviousSave():
         "echo 'eula=true' > eula.txt", shell=True, stdout=subprocess.PIPE
     )
     process.wait()
+
+
+getPreviousSave()
