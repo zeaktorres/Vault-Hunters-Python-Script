@@ -2,7 +2,7 @@ import boto3
 import subprocess
 
 
-def getPreviousSave():
+def getServer():
     print("here")
     session = boto3.session.Session()
     # User can pass customized access key, secret_key and token as well
@@ -23,23 +23,5 @@ def getPreviousSave():
     print(process.stdout)
     process.wait()
 
-    process = subprocess.Popen(
-        "unzip -o world-new.zip",
-        shell=True,
-        text=True,
-    )
-    print(process.stdout)
-    process.wait()
 
-    process = subprocess.Popen(
-        "cp world-new.zip world-old.zip", shell=True, stdout=subprocess.PIPE
-    )
-    process.wait()
-
-    process = subprocess.Popen(
-        "echo 'eula=true' > eula.txt", shell=True, stdout=subprocess.PIPE
-    )
-    process.wait()
-
-
-getPreviousSave()
+getServer()
